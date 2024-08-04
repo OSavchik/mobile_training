@@ -13,16 +13,16 @@ import java.util.Arrays;
 
 public class SearchPageObject extends MainPageObject {
     private static final String
-            BUTTON_ELEMENT = "//android.widget.Button[@resource-id='org.wikipedia:id/{SUBSTRING}']",
-            SEARCH_INIT_ELEMENT = "//androidx.cardview.widget.CardView[@resource-id='org.wikipedia:id/search_container']",
-            SEARCH_PAGE_ELEMENT = "org.wikipedia:id/{SUBSTRING}",
-            SEARCH_INPUT = "//android.widget.EditText[@resource-id='org.wikipedia:id/search_src_text']",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRING}']",
+            BUTTON_ELEMENT = "xpath://android.widget.Button[@resource-id='org.wikipedia:id/{SUBSTRING}']",
+            SEARCH_INIT_ELEMENT = "xpath://androidx.cardview.widget.CardView[@resource-id='org.wikipedia:id/search_container']",
+            SEARCH_PAGE_ELEMENT = "id:org.wikipedia:id/{SUBSTRING}",
+            SEARCH_INPUT = "xpath://android.widget.EditText[@resource-id='org.wikipedia:id/search_src_text']",
+            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRING}']",
             SEARCH_LINEARLAYOUT = "android.widget.LinearLayout",
-            SEARCH_HEADER_TEXTVIEW = "//android.widget.TextView[@resource-id='org.wikipedia:id/primaryTextView']",
+            SEARCH_HEADER_TEXTVIEW = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/primaryTextView']",
             SEARCH_FIRST_ARTICLE = "android.view.ViewGroup",
             SEARCH_DESCRIPTION_AND_TITLE = "org.wikipedia:id/{SUBSTRING}",
-            CHOICE_FIRST_ELEMENT = "//androidx.recyclerview.widget.RecyclerView[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[1]";
+            CHOICE_FIRST_ELEMENT = "xpath://androidx.recyclerview.widget.RecyclerView[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[1]";
 
     public SearchPageObject(AppiumDriver driver){
         super(driver);
@@ -45,46 +45,47 @@ public class SearchPageObject extends MainPageObject {
 
     public void initSearchAndClickButton(String substring){
         String search_result_xpath = getButtonElement(substring);
-        this.WaitForElementPresent(By.xpath(search_result_xpath), "Cannot find Skip button");
-        this.WaitForElementAndClick(By.xpath(search_result_xpath), "Cannot find and click Skip button", 5);
+        this.WaitForElementPresent(search_result_xpath, "Cannot find Skip button");
+        this.WaitForElementAndClick(search_result_xpath, "Cannot find and click Skip button", 5);
     }
 
     public void initSearchInput(){
-        this.WaitForElementPresent(By.xpath(SEARCH_INIT_ELEMENT), "Cannot find search input after clicking search init element");
-        this.WaitForElementAndClick(By.xpath(SEARCH_INIT_ELEMENT), "Cannot find and click search init element", 5);
+        this.WaitForElementPresent(SEARCH_INIT_ELEMENT, "Cannot find search input after clicking search init element");
+        this.WaitForElementAndClick(SEARCH_INIT_ELEMENT, "Cannot find and click search init element", 5);
     }
 
     public void waitForCancelButtonToAppear(String substring){
         String search_result_id = getPageElement(substring);
-        this.WaitForElementPresent(By.id(search_result_id), "Cannot find search cancel button !", 5);
+        this.WaitForElementPresent(search_result_id, "Cannot find search cancel button !", 5);
     }
 
     public void SearchNameListElement(String substring, String s_text){
         String search_result_id = getPageElement(substring);
-        this.GetSearchNameListElement(By.id(search_result_id), s_text);
+        this.GetSearchNameListElement(search_result_id, s_text);
     }
 
     public WebElement waitForPrimaryTextView(){
-        WebElement element =  this.WaitForElementPresent(By.xpath (SEARCH_HEADER_TEXTVIEW), "PrimaryTextView for swipe not found", 5);
+        WebElement element =  this.WaitForElementPresent(SEARCH_HEADER_TEXTVIEW, "PrimaryTextView for swipe not found", 5);
         return element;
     }
 
     public void waitForCancelButtonToDisappear(String substring){
         String search_result_id = getPageElement(substring);
-        this.WaitForElementNotPresent(By.id(search_result_id), "Search cancel button is still present !", 5);
+        this.WaitForElementNotPresent(search_result_id, "Search cancel button is still present !", 5);
     }
 
     public void clickCancelSearch(String substring){
         String search_result_id = getPageElement(substring);
-        this.WaitForElementAndClick (By.id(search_result_id), "Cannot find and click search cancel button", 5);
+        this.WaitForElementAndClick (search_result_id, "Cannot find and click search cancel button", 5);
     }
 
     public void clickFirstFindElement(){
-        this.WaitForElementAndClick (By.xpath(CHOICE_FIRST_ELEMENT), "Cannot find Search Wikipedia input", 5);
+        this.WaitForElementAndClick (CHOICE_FIRST_ELEMENT, "Cannot find Search Wikipedia input", 5);
     }
 
     public int GetCountLinearLayoutElements(){
-        return this.GetCountElementList(By.className(SEARCH_LINEARLAYOUT));
+        return this.GetCountElementList(SEARCH_LINEARLAYOUT);
+       // return this.GetCountElementList(By.className(SEARCH_LINEARLAYOUT));
     }
 
     public void GetFirstFindArticle(String s_text){
@@ -93,12 +94,12 @@ public class SearchPageObject extends MainPageObject {
 
     public int GetCountElementsOnPage(String substring){
         String search_result_id = getPageElement(substring);
-        return this.GetCountElementList(By.id(search_result_id));
+        return this.GetCountElementList(search_result_id);
     }
 
     public void typeSearchLine(String search_line){
         this.WaitForElementAndSendKeys(
-                By.xpath(SEARCH_INPUT),
+                SEARCH_INPUT,
                 search_line,
                 "Cannot find and type into serach input",
                 5);
@@ -106,19 +107,19 @@ public class SearchPageObject extends MainPageObject {
     public void waitForSearchResult(String substring){
         String search_result_xpath = getResultSearchElement(substring);
         this.WaitForElementPresent(
-                By.xpath(search_result_xpath),
+                search_result_xpath,
                 "Cannot find search result with substring " + substring);
     }
 
     public void clickByArticleWithSubstring(String substring){
         String search_result_xpath = getResultSearchElement(substring);
         this.WaitForElementAndClick (
-                By.xpath(search_result_xpath),
+                search_result_xpath,
                 "Cannot find and click search result with substring " + substring, 10);
     }
 
     public boolean checkAssertElementHasText(String s_text){
-        return this.assertElementHasText(By.xpath(SEARCH_INPUT), s_text);
+        return this.assertElementHasText(SEARCH_INPUT, s_text);
     }
     public void waitForElementByTitleAndDescription(String s_id_title, String s_id_description, String s_title, String s_description){
         String s_search_title = getTitleAndDescriptionElement(s_id_title);
