@@ -84,8 +84,9 @@ public class MainPageObject {
         return i_count_elements;
     }
 
-    public void GetAndClickFirstElementList(By by, String s_text){
+    public void GetAndClickFirstElementList(String locator, String s_text){
         try {
+            By by = this.getLocatorByString(locator);
             List <WebElement> ListElements = driver.findElements(by);
             if (ListElements.size() == 0 )
                 throw new AssertionError("Not found elements by locator "  + by.toString());
@@ -129,8 +130,11 @@ public class MainPageObject {
         return 0;
     }
 
-    public int GetElementByTitleAndDescription(By byListArticle, By byTitle, By byDescription, String s_title, String  s_description){
+    public int GetElementByTitleAndDescription(String s_byListArticle, String s_byTitle, String s_byDescription, String s_title, String  s_description){
         try {
+            By byListArticle = this.getLocatorByString(s_byListArticle);
+            By byTitle = this.getLocatorByString(s_byTitle);
+            By byDescription = this.getLocatorByString(s_byDescription);
             List <WebElement> childrenElements   = driver.findElements(byListArticle);
             if (childrenElements.size() == 0) System.out.println("NOT Title fount by " + byTitle.toString());
             int i_checkmatches = 0;
@@ -153,6 +157,40 @@ public class MainPageObject {
         return 0;
     }
 
+    public int FindElementByArrayString(String s_byListArticle, String s_byTitle, String s_byDescription, String[] s_array){
+        try {
+            By byListArticle = this.getLocatorByString(s_byListArticle);
+            By byTitle = this.getLocatorByString(s_byTitle);
+            By byDescription = this.getLocatorByString(s_byDescription);
+            List <WebElement> childrenElements   = driver.findElements(byListArticle);
+            if (childrenElements.size() == 0) System.out.println("NOT Title fount by " + byTitle.toString());
+            int i_checkmatches = 0;
+            for(int i=0; i < childrenElements.size(); i++) {
+                WebElement HeadElements = childrenElements.get(i);
+                List  <WebElement> childrenElements1 = childrenElements.get(i).findElements(byTitle);
+                String s_TitleText = childrenElements1.get(0).getText();
+                System.out.println(s_TitleText);
+                childrenElements1 = childrenElements.get(i).findElements(byDescription);
+                String s_DescriptionText = childrenElements1.get(0).getText();
+                System.out.println(s_DescriptionText);
+                for(String str2 : s_array)
+                {
+                    if ((s_TitleText.contains(str2))  & (s_DescriptionText.contains(str2))) i_checkmatches ++;
+                }
+                if (i_checkmatches == 3){
+                    System.out.println("FOUND three matches by Title and description ");
+                    return i;
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return -1;
+    }
+
     public String waitForElementAndGetAttribute(String locator,  String error_message, long timeoutInSeconds){
         WebElement element = WaitForElementPresent(locator, error_message, timeoutInSeconds);
         return element.getText() ;
@@ -167,6 +205,8 @@ public class MainPageObject {
             return By.xpath(locator);
         } else if (by_type.equals("id")) {
             return By.id(locator);
+        } else if (by_type.equals("className")) {
+            return By.className(locator);
         } else {
             throw new IllegalArgumentException("Can not get type of locator " + locator_with_type);
         }

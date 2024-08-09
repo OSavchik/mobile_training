@@ -1,28 +1,31 @@
 package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
 import java.time.Duration;
 import java.util.Arrays;
 
-public class SearchPageObject extends MainPageObject {
-    private static final String
-            BUTTON_ELEMENT = "xpath://android.widget.Button[@resource-id='org.wikipedia:id/{SUBSTRING}']",
-            SEARCH_INIT_ELEMENT = "xpath://androidx.cardview.widget.CardView[@resource-id='org.wikipedia:id/search_container']",
-            SEARCH_PAGE_ELEMENT = "id:org.wikipedia:id/{SUBSTRING}",
-            SEARCH_INPUT = "xpath://android.widget.EditText[@resource-id='org.wikipedia:id/search_src_text']",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRING}']",
-            SEARCH_LINEARLAYOUT = "android.widget.LinearLayout",
-            SEARCH_HEADER_TEXTVIEW = "xpath://android.widget.TextView[@resource-id='org.wikipedia:id/primaryTextView']",
-            SEARCH_FIRST_ARTICLE = "android.view.ViewGroup",
-            SEARCH_DESCRIPTION_AND_TITLE = "org.wikipedia:id/{SUBSTRING}",
-            CHOICE_FIRST_ELEMENT = "xpath://androidx.recyclerview.widget.RecyclerView[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[1]";
+abstract public class SearchPageObject extends MainPageObject {
+   protected static String
+           BUTTON_ELEMENT,
+           SEARCH_INIT_ELEMENT,
+           SEARCH_PAGE_ELEMENT,
+           SEARCH_INPUT,
+           SEARCH_RESULT_BY_SUBSTRING_TPL,
+           SEARCH_LINEARLAYOUT,
+           SEARCH_HEADER_TEXTVIEW,
+           SEARCH_FIRST_ARTICLE,
+           SEARCH_DESCRIPTION_AND_TITLE,
+           SEARCH_TEXT_VIEW,
+           CHOICE_INDEX_ELEMENT;
 
     public SearchPageObject(AppiumDriver driver){
         super(driver);
@@ -40,6 +43,10 @@ public class SearchPageObject extends MainPageObject {
     private static String getTitleAndDescriptionElement(String substring){
         return SEARCH_DESCRIPTION_AND_TITLE.replace("{SUBSTRING}", substring);
     }
+    private static String getTitleAndDescriptionIndexElement(String substring){
+        return CHOICE_INDEX_ELEMENT.replace("{SUBSTRING}", substring);
+    }
+
 
     /*TEMPLATES METHODS */
 
@@ -79,17 +86,18 @@ public class SearchPageObject extends MainPageObject {
         this.WaitForElementAndClick (search_result_id, "Cannot find and click search cancel button", 5);
     }
 
-    public void clickFirstFindElement(){
-        this.WaitForElementAndClick (CHOICE_FIRST_ELEMENT, "Cannot find Search Wikipedia input", 5);
+    public void clickIndexElement(String s){
+        String search_result_id = getTitleAndDescriptionIndexElement(s);
+        this.WaitForElementAndClick (search_result_id, "Cannot find Search Wikipedia input", 5);
     }
 
     public int GetCountLinearLayoutElements(){
         return this.GetCountElementList(SEARCH_LINEARLAYOUT);
-       // return this.GetCountElementList(By.className(SEARCH_LINEARLAYOUT));
     }
 
     public void GetFirstFindArticle(String s_text){
-        this.GetAndClickFirstElementList(By.className(SEARCH_FIRST_ARTICLE), s_text);
+        this.GetAndClickFirstElementList(SEARCH_FIRST_ARTICLE, s_text);
+       // this.GetAndClickFirstElementList(By.className(SEARCH_FIRST_ARTICLE), s_text);
     }
 
     public int GetCountElementsOnPage(String substring){
@@ -124,10 +132,22 @@ public class SearchPageObject extends MainPageObject {
     public void waitForElementByTitleAndDescription(String s_id_title, String s_id_description, String s_title, String s_description){
         String s_search_title = getTitleAndDescriptionElement(s_id_title);
         String s_search_description = getTitleAndDescriptionElement(s_id_description);
-        this.GetElementByTitleAndDescription(By.className(SEARCH_FIRST_ARTICLE), By.id(s_search_title),
-                                             By.id(s_search_description),
-                                             s_title,
-                                             s_description);
+        this.GetElementByTitleAndDescription(SEARCH_FIRST_ARTICLE, s_search_title,
+                s_search_description,
+                s_title,
+                s_description);
+    }
+
+    public void waitForElementByMultipleTitleAndDescription(String s_id_title, String s_id_description, String[] s_array){
+        String s_search_title = getTitleAndDescriptionElement(s_id_title);
+        String s_search_description = getTitleAndDescriptionElement(s_id_description);
+        int i = this.FindElementByArrayString(SEARCH_FIRST_ARTICLE, s_search_title,
+                s_search_description,
+                s_array);
+        if (i != -1){
+            i++;
+            clickIndexElement(String.valueOf(i));
+        }
     }
 
     public void swipeElementToLeft(WebElement element, String error_message) {
@@ -165,5 +185,27 @@ public class SearchPageObject extends MainPageObject {
         swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
         this.driver.perform(Arrays.asList(swipe));
+    }
+
+    public void scrollTo(String text)
+    {
+        WebElement element = driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""+text+"\").instance(0))"));
+        element.click();
+        System.out.println("RESULT");
+    }
+
+    protected void testSwipe(By by, String error_message) {
+        Dimension size = driver.manage().window().getSize();
+        int startX = size.getWidth() / 2;
+        int startY = size.getHeight() / 2;
+        int endX = (int) (size.getWidth() * 0.25);
+        int endY = startY;
+        PointerInput finger1 = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+        Sequence sequence = new Sequence(finger1, 1)
+                .addAction(finger1.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
+                .addAction(finger1.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                .addAction(new Pause(finger1, Duration.ofMillis(200)))
+                .addAction(finger1.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), endX, endY))
+                .addAction(finger1.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
     }
 }

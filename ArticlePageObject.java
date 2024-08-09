@@ -1,12 +1,11 @@
 package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject{
-    private static final String
-        TITLE = "xpath:(//android.widget.TextView[@text='JavaScript'])[1]";
+abstract public class ArticlePageObject extends MainPageObject{
+    protected static String
+        TITLE;
 
     public ArticlePageObject(AppiumDriver driver){
         super(driver);

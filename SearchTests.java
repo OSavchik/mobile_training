@@ -3,13 +3,15 @@ package tests;
 import lib.CoreTestCase;
 import lib.UI.ArticlePageObject;
 import lib.UI.SearchPageObject;
+import lib.UI.factories.ArticlePageObjectFactory;
+import lib.UI.factories.SearchPageObjectFactory;
 import org.junit.Test;
 import org.openqa.selenium.ScreenOrientation;
 
 public class SearchTests extends CoreTestCase {
     @Test
     public void testSearch(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -19,7 +21,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCancelSearch(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -30,7 +32,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCheckSearchArticleInBackground() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -41,17 +43,17 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchWiki_Ex2(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
         if (SearchPageObject.checkAssertElementHasText("Java"))
-            SearchPageObject.clickFirstFindElement();
+            SearchPageObject.clickIndexElement("1");
     }
 
     @Test
     public void testSearchWikiList_Ex3(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -67,7 +69,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchWikiListAndSearchText_Ex4(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -76,7 +78,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testAssertTitle_Ex6() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Title");
@@ -88,13 +90,13 @@ public class SearchTests extends CoreTestCase {
     public void testChangeScreenOrientationSearchResult_EX7() {
         driver.rotate(ScreenOrientation.PORTRAIT);
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.clickByArticleWithSubstring("High-level programming language");
 
-        ArticlePageObject ArticlePageObject =new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String title_before_rotation = ArticlePageObject.getArticleTitle();
         this.rotateScreenPortrait();
         String title_after_rotation = ArticlePageObject.getArticleTitle();
@@ -113,7 +115,7 @@ public class SearchTests extends CoreTestCase {
     }
     @Test
     public void testTemplaterefactoring_Ex9() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Appium");
@@ -122,6 +124,19 @@ public class SearchTests extends CoreTestCase {
                 "Appium",
                 "Roman");
 
+    }
+
+    @Test
+    public void testmultiplesearch_Ex12() {
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
+        SearchPageObject.initSearchInput();
+        String s_Search = "skills task course";
+        SearchPageObject.typeSearchLine(s_Search);
+        String[] s_array = s_Search.split(" ");
+        SearchPageObject.waitForElementByMultipleTitleAndDescription( "page_list_item_title",
+                "page_list_item_description",
+                s_array);
     }
 
 }
