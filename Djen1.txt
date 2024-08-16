@@ -1,0 +1,91 @@
+Started by user admin
+Running as SYSTEM
+Building in workspace C:\ProgramData\Jenkins\.jenkins\workspace\StartEmulator
+[StartEmulator] $ cmd /c call C:\Windows\TEMP\jenkins9793165305525409132.bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\StartEmulator>cd /d "C:\Users\HP\AppData\Local\Android\Sdk\emulator"  
+
+C:\Users\HP\AppData\Local\Android\Sdk\emulator>emulator -avd Example 
+INFO    | Storing crashdata in: C:\Windows\TEMP\\AndroidEmulator\emu-crash-34.2.15.db, detection is enabled for process: 17356
+INFO    | Android emulator version 34.2.15.0 (build_id 11906825) (CL:N/A)
+INFO    | Found systemPath C:\Users\HP\AppData\Local\Android\Sdk\system-images\android-29\google_apis_playstore\x86\
+INFO    | Ignore IPv6 address: d0b7:4f8c:702:0:f07c:4f8c:702:0 (2x)
+WARNING | FeatureControl is requesting a non existing feature.
+INFO    | Warning:  (6x)
+WARNING | Your GPU drivers may have a bug. Switching to software rendering.
+added library vulkan-1.dll
+initialize: Supports id properties, got a vulkan device UUID
+INFO    | Storing crashdata in: C:\Windows\TEMP\\AndroidEmulator\emu-crash-34.2.15.db, detection is enabled for process: 10080
+INFO    | Duplicate loglines will be removed, if you wish to see each individual line launch with the -log-nofilter flag.
+INFO    | Increasing RAM size to 2048MB
+INFO    | IPv4 server found: 10.199.19.12
+INFO    | Ignore IPv6 address: d0b7:4f8c:702:0:f07c:4f8c:702:0
+INFO    | Warning: 
+INFO    | Critical: 
+INFO    | Warning: 
+library_mode swiftshader_indirect gpu mode swiftshader_indirect
+INFO    | Initializing hardware OpenGLES emulation support
+android_startOpenglesRenderer: gpu infoI0816 11:12:48.063809    2044 HealthMonitor.cpp:279] HealthMonitor disabled.
+createGlobalVkEmulation:995 Selecting Vulkan device: Quadro M2000M
+I0816 11:12:48.257533    2044 VkCommonOperations.cpp:1276] Initializing VkEmulation features:
+I0816 11:12:48.257547    2044 VkCommonOperations.cpp:1277]     glInteropSupported: false
+I0816 11:12:48.257550    2044 VkCommonOperations.cpp:1278]     useDeferredCommands: true
+I0816 11:12:48.257554    2044 VkCommonOperations.cpp:1280]     createResourceWithRequirements: true
+I0816 11:12:48.257556    2044 VkCommonOperations.cpp:1281]     useVulkanComposition: false
+I0816 11:12:48.257558    2044 VkCommonOperations.cpp:1282]     useVulkanNativeSwapchain: false
+I0816 11:12:48.257560    2044 VkCommonOperations.cpp:1283]     enable guestRenderDoc: false
+I0816 11:12:48.257562    2044 VkCommonOperations.cpp:1284]     ASTC LDR emulation mode: 2
+I0816 11:12:48.257564    2044 VkCommonOperations.cpp:1285]     enable ETC2 emulation: true
+I0816 11:12:48.257566    2044 VkCommonOperations.cpp:1286]     enable Ycbcr emulation: false
+I0816 11:12:48.257568    2044 VkCommonOperations.cpp:1287]     guestUsesAngle: false
+I0816 11:12:48.257570    2044 VkCommonOperations.cpp:1288]     useDedicatedAllocations: false
+I0816 11:12:48.258645    2044 FrameBuffer.cpp:506] Graphics Adapter Vendor Google (Google Inc.)
+I0816 11:12:48.258657    2044 FrameBuffer.cpp:507] Graphics Adapter Android Emulator OpenGL ES Translator (Google SwiftShader)
+I0816 11:12:48.258668    2044 FrameBuffer.cpp:508] Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+I0816 11:12:48.258673    2044 FrameBuffer.cpp:509] Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
+I0816 11:12:48.258709    2044 FrameBuffer.cpp:510] Graphics Device Extensions N/A
+WHPX on Windows 10.0.19045 detected.
+Windows Hypervisor Platform accelerator is operational
+dsound: Could not set cooperative level for window 0000000000000000
+dsound: Reason: An invalid parameter was passed to the returning function
+Could not init `dsound' audio driver
+INFO    | Monitoring duration of emulator setup.
+WARNING | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
+INFO    | Using security allow list from: C:\Users\HP\AppData\Local\Android\Sdk\emulator\lib\emulator_access.json
+WARNING | *** Basic token auth should only be used by android-studio ***
+INFO    | The active JSON Web Key Sets can be found here: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\avd\running\10080\jwks\0b406c13-6212-4ca3-9403-72439b0d5184\active.jwk
+INFO    | Scanning C:\Windows\system32\config\systemprofile\AppData\Local\Temp\avd\running\10080\jwks\0b406c13-6212-4ca3-9403-72439b0d5184 for jwk keys.
+INFO    | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
+INFO    | Advertising in: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\avd\running\pid_10080.ini
+I0816 11:12:48.532660   10520 FrameBuffer.cpp:2853] setDisplayConfigs w 720 h 1280 dpiX 320 dpiY 320
+I0816 11:12:48.532868   10520 FrameBuffer.cpp:2866] setDisplayActiveConfig 0
+##############################################################################
+##                        WARNING - ACTION REQUIRED                         ##
+##  Consider using the '-metrics-collection' flag to help improve the       ##
+##  emulator by sending anonymized usage data. Or use the '-no-metrics'     ##
+##  flag to bypass this warning and turn off the metrics collection.        ##
+##  In a future release this warning will turn into a one-time blocking     ##
+##  prompt to ask for explicit user input regarding metrics collection.     ##
+##                                                                          ##
+##  Please see '-help-metrics-collection' for more details. You can use     ##
+##  '-metrics-to-file' or '-metrics-to-console' flags to see what type of   ##
+##  data is being collected by emulator as part of usage statistics.        ##
+##############################################################################
+INFO    | Loading snapshot 'default_boot'...
+WARNING | snapshot was created with gfxstream=0, but this emulator has gfxstream=1
+WARNING | Error -1 from the snapshot callback
+WARNING | Failed to load snapshot 'default_boot'
+WARNING | Cold boot: different renderer configured
+INFO    | Critical: 
+INFO    | Boot completed in 37641 ms
+INFO    | Increasing screen off timeout, logcat buffer size to 2M.
+INFO    | Wait for emulator (pid 10080) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+INFO    | Wait for emulator (pid 10080) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+
+INFO    | Saving with gfxstream=1
+�������� �믮������ ����⭮�� 䠩�� [Y(��)/N(���)]? 
+
+C:\Users\HP\AppData\Local\Android\Sdk\emulator>exit 1 
+Сборка была прервана
+Прервано пользователем admin
+Finished: ABORTED
