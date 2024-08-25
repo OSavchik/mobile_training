@@ -1,7 +1,7 @@
 package lib.UI;
 
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -25,9 +26,13 @@ abstract public class SearchPageObject extends MainPageObject {
            SEARCH_FIRST_ARTICLE,
            SEARCH_DESCRIPTION_AND_TITLE,
            SEARCH_TEXT_VIEW,
+           SEARCH_COUNT_ELEMENT,
+           SEARCH_CLEAR_LIST_ELEMENT,
+           SEARCH_ELEMENTS,
+           CHOICE_TITLE_ELEMENT,
            CHOICE_INDEX_ELEMENT;
 
-    public SearchPageObject(AppiumDriver driver){
+    public SearchPageObject(RemoteWebDriver driver){
         super(driver);
     }
     /*TEMPLATES METHODS */
@@ -43,6 +48,7 @@ abstract public class SearchPageObject extends MainPageObject {
     private static String getTitleAndDescriptionElement(String substring){
         return SEARCH_DESCRIPTION_AND_TITLE.replace("{SUBSTRING}", substring);
     }
+
     private static String getTitleAndDescriptionIndexElement(String substring){
         return CHOICE_INDEX_ELEMENT.replace("{SUBSTRING}", substring);
     }
@@ -51,9 +57,11 @@ abstract public class SearchPageObject extends MainPageObject {
     /*TEMPLATES METHODS */
 
     public void initSearchAndClickButton(String substring){
-        String search_result_xpath = getButtonElement(substring);
-        this.WaitForElementPresent(search_result_xpath, "Cannot find Skip button");
-        this.WaitForElementAndClick(search_result_xpath, "Cannot find and click Skip button", 5);
+        if(Platform.getInstance().IsAndroid()) {
+            String search_result_xpath = getButtonElement(substring);
+            this.WaitForElementPresent(search_result_xpath, "Cannot find Skip button");
+            this.WaitForElementAndClick(search_result_xpath, "Cannot find and click Skip button", 5);
+        }
     }
 
     public void initSearchInput(){
@@ -67,7 +75,9 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void SearchNameListElement(String substring, String s_text){
-        String search_result_id = getPageElement(substring);
+        String search_result_id = "";
+        if(Platform.getInstance().IsAndroid())  search_result_id = getPageElement(substring);
+        if(Platform.getInstance().IsMW())  search_result_id = SEARCH_ELEMENTS;
         this.GetSearchNameListElement(search_result_id, s_text);
     }
 
@@ -86,9 +96,8 @@ abstract public class SearchPageObject extends MainPageObject {
         this.WaitForElementAndClick (search_result_id, "Cannot find and click search cancel button", 5);
     }
 
-    public void clickIndexElement(String s){
-        String search_result_id = getTitleAndDescriptionIndexElement(s);
-        this.WaitForElementAndClick (search_result_id, "Cannot find Search Wikipedia input", 5);
+    public void clickCLearListSearch(){
+        this.WaitForElementAndClick (SEARCH_CLEAR_LIST_ELEMENT, "Cannot find and click search cancel button", 5);
     }
 
     public int GetCountLinearLayoutElements(){
@@ -101,7 +110,9 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public int GetCountElementsOnPage(String substring){
-        String search_result_id = getPageElement(substring);
+        String search_result_id = "";
+        if(Platform.getInstance().IsAndroid())  search_result_id = getPageElement(substring);
+        if(Platform.getInstance().IsMW())  search_result_id = SEARCH_COUNT_ELEMENT;
         return this.GetCountElementList(search_result_id);
     }
 
@@ -109,7 +120,7 @@ abstract public class SearchPageObject extends MainPageObject {
         this.WaitForElementAndSendKeys(
                 SEARCH_INPUT,
                 search_line,
-                "Cannot find and type into serach input",
+                "Cannot find and type into search input",
                 5);
     }
     public void waitForSearchResult(String substring){
@@ -126,16 +137,10 @@ abstract public class SearchPageObject extends MainPageObject {
                 "Cannot find and click search result with substring " + substring, 10);
     }
 
-    public boolean checkAssertElementHasText(String s_text){
-        return this.assertElementHasText(SEARCH_INPUT, s_text);
-    }
-    public void waitForElementByTitleAndDescription(String s_id_title, String s_id_description, String s_title, String s_description){
-        String s_search_title = getTitleAndDescriptionElement(s_id_title);
-        String s_search_description = getTitleAndDescriptionElement(s_id_description);
-        this.GetElementByTitleAndDescription(SEARCH_FIRST_ARTICLE, s_search_title,
-                s_search_description,
-                s_title,
-                s_description);
+
+    public void clickIndexElement(String s){
+        String search_result_id = getTitleAndDescriptionIndexElement(s);
+        this.WaitForElementAndClick (search_result_id, "Cannot find Search Wikipedia input", 5);
     }
 
     public void waitForElementByMultipleTitleAndDescription(String s_id_title, String s_id_description, String[] s_array){
@@ -148,6 +153,23 @@ abstract public class SearchPageObject extends MainPageObject {
             i++;
             clickIndexElement(String.valueOf(i));
         }
+    }
+
+    public boolean checkAssertElementHasText(String s_text){
+        return this.assertElementHasText(SEARCH_INPUT, s_text);
+    }
+    public void waitForElementByTitleAndDescription(String s_id_title, String s_id_description, String s_title, String s_description){
+        String s_search_title = getTitleAndDescriptionElement(s_id_title);
+        String s_search_description = getTitleAndDescriptionElement(s_id_description);
+        this.GetElementByTitleAndDescription(SEARCH_FIRST_ARTICLE, s_search_title,
+                s_search_description,
+                s_title,
+                s_description);
+    }
+
+    public void waitForElementByMultipleTitleAndDescriptionMW(int i_count, String[] s_array){
+        int i = FindElementByArrayStringMW(CHOICE_TITLE_ELEMENT, CHOICE_INDEX_ELEMENT, i_count, s_array);
+        if (i == -1)  System.out.println("NOT FOUND three matches by Title and description ");
     }
 
     public void swipeElementToLeft(WebElement element, String error_message) {
@@ -208,4 +230,6 @@ abstract public class SearchPageObject extends MainPageObject {
                 .addAction(finger1.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), endX, endY))
                 .addAction(finger1.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
     }
+
+
 }

@@ -1,7 +1,7 @@
 package lib.UI.Android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.UI.SearchPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AndroidSearchPageObject extends SearchPageObject {
     static{
@@ -16,10 +16,9 @@ public class AndroidSearchPageObject extends SearchPageObject {
                 SEARCH_TEXT_VIEW = "className:android.widget.TextView";
                 SEARCH_DESCRIPTION_AND_TITLE = "id:org.wikipedia:id/{SUBSTRING}";
                 CHOICE_INDEX_ELEMENT = "xpath://androidx.recyclerview.widget.RecyclerView[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[{SUBSTRING}]";
-
     }
 
-    public AndroidSearchPageObject(AppiumDriver driver){
+    public AndroidSearchPageObject(RemoteWebDriver driver){
         super(driver);
     }
 

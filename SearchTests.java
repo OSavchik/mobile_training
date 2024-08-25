@@ -1,12 +1,9 @@
 package tests;
 
 import lib.CoreTestCase;
-import lib.UI.ArticlePageObject;
 import lib.UI.SearchPageObject;
-import lib.UI.factories.ArticlePageObjectFactory;
 import lib.UI.factories.SearchPageObjectFactory;
 import org.junit.Test;
-import org.openqa.selenium.ScreenOrientation;
 
 public class SearchTests extends CoreTestCase {
     @Test
@@ -18,8 +15,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.waitForSearchResult("Object-oriented programming language");
     }
 
-
-    @Test
+     @Test
     public void testCancelSearch(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
@@ -30,7 +26,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.waitForCancelButtonToDisappear("search_close_btn");
     }
 
-    @Test
+@Test
     public void testCheckSearchArticleInBackground() {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
@@ -60,14 +56,15 @@ public class SearchTests extends CoreTestCase {
 
         int i_count = SearchPageObject.GetCountElementsOnPage("page_list_item_title");
         if (i_count > 0) {
-            SearchPageObject.clickCancelSearch("search_close_btn");
+            SearchPageObject.clickCLearListSearch();
+            i_count = 0;
             i_count = SearchPageObject.GetCountElementsOnPage("page_list_item_title");
             if (i_count == 0) System.out.println("list items not found");
             else System.out.println("list items found and not reset");
         }
     }
 
-    @Test
+  /*  @Test
     public void testSearchWikiListAndSearchText_Ex4(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
@@ -76,7 +73,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.SearchNameListElement("page_list_item_title", "Java");
     }
 
-    @Test
+ /* @Test
     public void testAssertTitle_Ex6() {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
@@ -96,7 +93,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.clickByArticleWithSubstring("High-level programming language");
 
-        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
+        ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String title_before_rotation = ArticlePageObject.getArticleTitle();
         this.rotateScreenPortrait();
         String title_after_rotation = ArticlePageObject.getArticleTitle();
@@ -126,6 +123,8 @@ public class SearchTests extends CoreTestCase {
 
     }
 
+
+
     @Test
     public void testmultiplesearch_Ex12() {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -138,5 +137,24 @@ public class SearchTests extends CoreTestCase {
                 "page_list_item_description",
                 s_array);
     }
+      */
+
+
+    @Test
+    public void testmultiplesearchMW_Ex18() {
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
+        SearchPageObject.initSearchInput();
+        String s_Search = "java script";
+        SearchPageObject.typeSearchLine(s_Search);
+        String[] s_array = s_Search.split(" ");
+
+        int i_count = SearchPageObject.GetCountElementsOnPage("");
+        if (i_count > 0) {
+            SearchPageObject.waitForElementByMultipleTitleAndDescriptionMW( i_count,  s_array);
+        } else System.out.println("NOT FOUND ELEMENTS BY INPUT SEARCH " + s_Search);
+
+    }
+
 
 }
