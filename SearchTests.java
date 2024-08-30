@@ -1,21 +1,53 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.UI.SearchPageObject;
 import lib.UI.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
+import static lib.UI.MainPageObject.screenshot;
+
+@Epic("Test for search")
 public class SearchTests extends CoreTestCase {
     @Test
+    @DisplayName("Search article by description")
+    @Description("Search for found article by description - Object-oriented programming language")
+    @Step("Starting test testSearch")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testSearch(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
         SearchPageObject.initSearchInput();
+        screenshot(SearchPageObject.takeScreenShot("SearchPage") );
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.waitForSearchResult("Object-oriented programming language");
+        SearchPageObject.waitForSearchResult("2");
+        screenshot(SearchPageObject.takeScreenShot("Search Panel") );
     }
 
-     @Test
+    @Test
+    @Features(value={@Feature(value = "Search article"), @Feature(value = "Found Elements")})
+    @DisplayName("Multiple search")
+    @Description("Searching the input array")
+    @Step("Starting testmultiplesearch")
+    @Severity(value = SeverityLevel.MINOR)
+    public void testmultiplesearchMW_Ex18() {
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
+        SearchPageObject.initSearchInput();
+        String s_Search = "java script";
+        SearchPageObject.typeSearchLine(s_Search);
+        String[] s_array = s_Search.split(" ");
+
+        int i_count = SearchPageObject.GetCountElementsOnPage("");
+        if (i_count > 0) {
+            SearchPageObject.waitForElementByMultipleTitleAndDescriptionMW( i_count,  s_array);
+        } else System.out.println("NOT FOUND ELEMENTS BY INPUT SEARCH " + s_Search);
+
+    }
+
+  /*   @Test
     public void testCancelSearch(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
@@ -64,7 +96,7 @@ public class SearchTests extends CoreTestCase {
         }
     }
 
-  /*  @Test
+    @Test
     public void testSearchWikiListAndSearchText_Ex4(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
@@ -97,14 +129,14 @@ public class SearchTests extends CoreTestCase {
         String title_before_rotation = ArticlePageObject.getArticleTitle();
         this.rotateScreenPortrait();
         String title_after_rotation = ArticlePageObject.getArticleTitle();
-        assertEquals(
+        Assert.assertEquals(
                 "Article title have been changed after screen rotation",
                 title_before_rotation,
                 title_after_rotation
         );
         this.rotateScreenLandscape();
         String title_after_second_rotation = ArticlePageObject.getArticleTitle();
-        assertEquals(
+        Assert.assertEquals(
                 "Article title have been changed after screen rotation",
                 title_before_rotation,
                 title_after_second_rotation
@@ -137,24 +169,12 @@ public class SearchTests extends CoreTestCase {
                 "page_list_item_description",
                 s_array);
     }
-      */
 
 
-    @Test
-    public void testmultiplesearchMW_Ex18() {
-        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
-        SearchPageObject.initSearchAndClickButton("fragment_onboarding_skip_button");
-        SearchPageObject.initSearchInput();
-        String s_Search = "java script";
-        SearchPageObject.typeSearchLine(s_Search);
-        String[] s_array = s_Search.split(" ");
 
-        int i_count = SearchPageObject.GetCountElementsOnPage("");
-        if (i_count > 0) {
-            SearchPageObject.waitForElementByMultipleTitleAndDescriptionMW( i_count,  s_array);
-        } else System.out.println("NOT FOUND ELEMENTS BY INPUT SEARCH " + s_Search);
 
-    }
+
+   */
 
 
 }
